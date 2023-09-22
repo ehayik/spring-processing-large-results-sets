@@ -30,7 +30,7 @@ public class EmployeeService {
                 ((Session) entityManager.getDelegate()).getSessionFactory().openStatelessSession();
 
         try (statelessSession) {
-            var query = statelessSession.createQuery("SELECT e FROM Employee e", Employee.class);
+            var query = statelessSession.createQuery("FROM Employee e", Employee.class);
             query.setFetchSize(fetchSize);
             query.setReadOnly(true);
             query.setLockMode("e", NONE);
