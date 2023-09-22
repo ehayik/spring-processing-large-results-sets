@@ -35,9 +35,9 @@ public class EmployeeService {
             query.setReadOnly(true);
             query.setLockMode("e", NONE);
 
-            try (var results = query.scroll(FORWARD_ONLY)) {
-                while (results.next()) {
-                    log.debug("Employee's name is: {}", results.get().getFullName());
+            try (var employees = query.scroll(FORWARD_ONLY)) {
+                while (employees.next()) {
+                    log.debug("Employee's name is: {}", employees.get().getFullName());
                 }
             }
         }
@@ -48,10 +48,11 @@ public class EmployeeService {
     @Transactional(readOnly = true)
     public void logAllEmployeeFullNamesUsingSpringData() {
         var stopwatch = Stopwatch.createStarted();
-        employeeRepository
-                .scrollAll()
-                .forEach(employee ->
-                        log.debug("Employee's name is: {}", employee.getFullName()));
+
+        try (var employees = employeeRepository.scroll()) {
+            employees.forEach(employee -> log.debug("Employee's name is: {}", employee.getFullName()));
+        }
+
         log.info("Spring Data: All employees were printed after {} milliseconds.", stopwatch.elapsed(MILLISECONDS));
     }
 }

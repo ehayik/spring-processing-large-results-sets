@@ -10,5 +10,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Query("""
             FROM Employee ep
             """)
-    Stream<Employee> scrollAll();
+    Stream<Employee> scroll();
 }
