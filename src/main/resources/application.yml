@@ -1,21 +1,15 @@
 spring:
   jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: none
-#    properties:
-#      hibernate:
-#        jdbc:
-#          fetch_size: 2000
   datasource:
     url: jdbc:mysql://localhost:3306/employees
     username: admin
     password: admin123
 
-#SQL statement logging configuration
 decorator:
   datasource:
-    enabled: true
+    #SQL statement logging configuration
     datasource-proxy:
       logging: slf4j
       count-query: false
@@ -30,6 +24,18 @@ decorator:
         log-level: info
         logger-name: "net.ttddyy.dsproxy.listener.logging.SLF4JSlowQueryListener"
         threshold: 300
+    # reactive connection pooling
+    flexy-pool:
+     acquiring-strategy:
+       increment-pool:
+         max-overflow-pool-size: 10
+         timeout-millis: 500
+       retry:
+         attempts: 2
+     metrics:
+       reporter:
+         jmx:
+           enabled: false
 
 logging:
   level:
