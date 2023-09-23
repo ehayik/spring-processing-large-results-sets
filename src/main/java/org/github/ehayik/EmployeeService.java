@@ -5,7 +5,6 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +17,6 @@ import static org.hibernate.ScrollMode.FORWARD_ONLY;
 @RequiredArgsConstructor
 public class EmployeeService {
 
-    @Value("${spring.jpa.properties.hibernate.jdbc.fetch_size}")
-    private final int fetchSize;
-
     private final EntityManager entityManager;
     private final EmployeeRepository employeeRepository;
 
@@ -31,7 +27,7 @@ public class EmployeeService {
 
         try (statelessSession) {
             var query = statelessSession.createQuery("FROM Employee e", Employee.class);
-            query.setFetchSize(fetchSize);
+            query.setFetchSize(Integer.MIN_VALUE);
             query.setReadOnly(true);
             query.setLockMode("e", NONE);
 
