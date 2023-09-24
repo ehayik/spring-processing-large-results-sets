@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.hibernate.LockMode.NONE;
-import static org.hibernate.ScrollMode.FORWARD_ONLY;
 
 @Slf4j
 @Service
@@ -26,15 +25,14 @@ public class EmployeeService {
                 ((Session) entityManager.getDelegate()).getSessionFactory().openStatelessSession();
 
         try (statelessSession) {
-            var query = statelessSession.createQuery("FROM Employee e", Employee.class);
-            query.setFetchSize(Integer.MIN_VALUE);
-            query.setReadOnly(true);
-            query.setLockMode("e", NONE);
+            var query = statelessSession
+                    .createQuery("FROM Employee e", Employee.class)
+                    .setReadOnly(true)
+                    .setFetchSize(Integer.MIN_VALUE)
+                    .setLockMode("e", NONE);
 
-            try (var employees = query.scroll(FORWARD_ONLY)) {
-                while (employees.next()) {
-                    log.debug("Employee's name is: {}", employees.get().getFullName());
-                }
+            try (var employeesStream = query.stream()) {
+                employeesStream.forEach(employee -> log.debug("Employee's name is: {}", employee.getFullName()));
             }
         }
 
