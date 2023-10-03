@@ -1,4 +1,22 @@
-# Processing large results sets strategies using Spring Data and Hibernate
+# Evaluating strategies for processing large results sets using Spring Data and Hibernate
+
+- Hibernate Stream
+- Spring Data Stream
+- Spring Data Scrolling API
+
+## Takeaways
+
+- In OLTP applications, you should always strive for keeping the JDBC `ResultSet` 
+  as small as possible. That’s why batch processing and pagination queries are usually 
+  a better alternative than streaming a large result set. [source here](https://vladmihalcea.com/how-does-mysql-result-set-streaming-perform-vs-fetching-the-whole-jdbc-resultset-at-once/)
+- [Pagination](http://use-the-index-luke.com/sql/partial-results) is a more scalable data fetching [source here](https://vladmihalcea.com/whats-new-in-jpa-2-2-stream-the-result-of-a-query-execution/): 
+  - The overly common _offset_ paging is not suitable for large result sets (because the response time increases linearly with the page number) 
+    and you should consider [_keyset_ pagination](http://use-the-index-luke.com/no-offset) when traversing large result sets. 
+  - The _keyset_ pagination offers a [constant response time](http://blog.jooq.org/2013/11/18/faster-sql-pagination-with-keysets-continued/)
+    insensitive to the relative position of the page being fetched.
+  - Spring Jpa Scrolling API offers a more fine-grained approach to iterate through larger results set chunks using [Keyset-Filtering](https://docs.spring.io/spring-data/commons/docs/current/reference/html/#repositories.scrolling.keyset):
+    - However, we cannot limit the result using external configurations properties.
+      - > define static result limiting using the [Top or First keyword](https://docs.spring.io/spring-data/commons/docs/current/reference/html/#repositories.limit-query-result) through query derivation
 
 ## Requirements
 
@@ -30,3 +48,4 @@ I learned a lot from the projects and resources listed below:
 - [Spring read-only transaction Hibernate optimization](https://vladmihalcea.com/spring-read-only-transaction-hibernate-optimization/)
 - [Spring read-only transaction Hibernate optimization](https://vladmihalcea.com/spring-read-only-transaction-hibernate-optimization/)
 - [Scroll API in Spring Data JPA](https://www.baeldung.com/spring-data-jpa-scroll-api)
+- [Spring Docker Compose Module - Connecting to the Container Database](https://www.youtube.com/watch?v=NOrwxSI_VIg)
