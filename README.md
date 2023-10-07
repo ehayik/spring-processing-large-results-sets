@@ -20,8 +20,9 @@
 
 ## Requirements
 
-- Docker
 - Java 21
+- Gradle
+- Docker
 
 ## How to install
 
