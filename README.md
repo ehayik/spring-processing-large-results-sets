@@ -1,4 +1,6 @@
-# Evaluating strategies for processing large results sets using Spring Data and Hibernate
+#  Processing Large Result Sets with Spring Boot
+
+Evaluating strategies for processing large results sets using Spring Data and Hibernate
 
 - Hibernate Stream
 - Spring Data Stream
@@ -20,9 +22,10 @@
 
 ## Requirements
 
-- Java 21
+- Java JDK version 21
 - Gradle
 - Docker
+- An IDE that supports Java and Spring Boot development, such as IntelliJ IDEA
 
 ## How to install
 
