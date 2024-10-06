@@ -52,3 +52,4 @@ I learned a lot from the projects and resources listed below:
 - [Spring read-only transaction Hibernate optimization](https://vladmihalcea.com/spring-read-only-transaction-hibernate-optimization/)
 - [Scroll API in Spring Data JPA](https://www.baeldung.com/spring-data-jpa-scroll-api)
 - [Spring Docker Compose Module - Connecting to the Container Database](https://www.youtube.com/watch?v=NOrwxSI_VIg)
+- [Keyset Pagination with Spring Data WindowIterator](https://vladmihalcea.com/spring-data-windowiterator/)

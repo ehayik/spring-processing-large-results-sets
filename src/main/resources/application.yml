@@ -6,6 +6,9 @@ spring:
     url: jdbc:mysql://localhost:3306/employees
     username: admin
     password: admin123
+  docker:
+    compose:
+      enabled: false
 
 decorator:
   datasource:

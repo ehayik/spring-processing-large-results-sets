@@ -5,10 +5,14 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.ScrollPosition;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.support.WindowIterator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.hibernate.LockMode.NONE;
@@ -54,8 +58,10 @@ public class EmployeeService {
 
     @Transactional(readOnly = true)
     public void logAllEmployeeUsingSpringDataScrollAPI() {
+        var pageRequest = PageRequest.of(0, 100, Sort.by("employeeNumber"));
+
         var stopwatch = Stopwatch.createStarted();
-        var employees = WindowIterator.of(employeeRepository::findFirst100000ByOrderByEmployeeNumber)
+        var employees = WindowIterator.of(position -> employeeRepository.findAllByBirthDateAfter(LocalDate.EPOCH, pageRequest, position))
                 .startingAt(ScrollPosition.keyset());
         employees.forEachRemaining(employee -> log.debug("Employee's name is: {}", employee.getFullName()));
         log.info(
